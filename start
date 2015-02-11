@@ -3,6 +3,14 @@
 
 DEFAULT_AUTH_NAME="SVN"
 
+# Customize the short message
+if [ -e "/svn/websvn.txt" ] ; then
+    content=$(cat "/svn/websvn.txt")
+    for tmpl in /usr/share/websvn/templates/*/index.tmpl ; do
+        perl -pi -e "s/>You can customize[^>]+</>$content</g" "$tmpl"
+    done
+fi
+
 # Set the web server auth name for access
 perl -pi -e "s/ +AuthName .+$/AuthName \"${AUTH_NAME:-$DEFAULT_AUTH_NAME}\"/g" /etc/apache2/sites-available/websvn.conf
 
